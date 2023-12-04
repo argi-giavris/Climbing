@@ -9,7 +9,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.rmi.RemoteException;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -36,7 +35,7 @@ public class ViewRoutesByGradeServlet extends HttpServlet {
             resp.setContentType("application/json");
             resp.getWriter().write(routesJson);
         } else {
-            throw new RemoteException("Routes graded " + grade + " not exists");
+            throw new RuntimeException("Routes graded as " + grade + " not exists");
         }
 
 
