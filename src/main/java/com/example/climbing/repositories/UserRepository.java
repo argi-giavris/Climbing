@@ -3,9 +3,7 @@ package com.example.climbing.repositories;
 import com.example.climbing.configuration.HikariDatabaseConnection;
 import com.example.climbing.models.Role;
 import com.example.climbing.models.User;
-import com.example.climbing.configuration.DatabaseConnection;
 import org.mindrot.jbcrypt.BCrypt;
-import com.zaxxer.hikari.HikariDataSource;
 
 import java.sql.*;
 
@@ -13,12 +11,8 @@ public class UserRepository {
     public User CreateUser(User user) {
         String query = "INSERT INTO users (first_name, last_name, password, email, role) VALUES(?, ?, ?, ?, ?)";
 
-        HikariDataSource dataSource = HikariDatabaseConnection.getDataSource();
-        dataSource.setAutoCommit(true);
-
-
         try {
-            Connection connection = dataSource.getConnection() ;
+            Connection connection = HikariDatabaseConnection.getDataSource().getConnection();
             PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
 
             statement.setString(1, user.getFirstName());
@@ -50,7 +44,7 @@ public class UserRepository {
     public boolean userExistsByEmail(String email) {
         String query = "SELECT id FROM users where email = ?";
 
-        try (Connection dbConnection = DatabaseConnection.initializeDatabase();
+        try (Connection dbConnection = HikariDatabaseConnection.getDataSource().getConnection();
              PreparedStatement statement = dbConnection.prepareStatement(query)
         ) {
             statement.setString(1, email);
@@ -61,7 +55,7 @@ public class UserRepository {
             }
             return false;
 
-        } catch (SQLException | ClassNotFoundException e) {
+        } catch (SQLException e) {
             throw new RuntimeException(e);
         }
 
@@ -73,7 +67,7 @@ public class UserRepository {
 
         User loggedUser = null;
 
-        try (Connection dbConnection = DatabaseConnection.initializeDatabase();
+        try (Connection dbConnection = HikariDatabaseConnection.getDataSource().getConnection();
              PreparedStatement statement = dbConnection.prepareStatement(query)
         ){
             statement.setString(1,user.getEmail());
@@ -92,7 +86,7 @@ public class UserRepository {
              }
 
 
-        } catch(SQLException | ClassNotFoundException e){
+        } catch(SQLException e){
             throw new RuntimeException(e);
         }
         return loggedUser;

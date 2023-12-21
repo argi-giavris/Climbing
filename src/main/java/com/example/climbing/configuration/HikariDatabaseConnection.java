@@ -2,19 +2,34 @@ package com.example.climbing.configuration;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
-//import net.ttddyy.dsproxy.support.ProxyDataSourceBuilder;
+import net.ttddyy.dsproxy.support.ProxyDataSourceBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import javax.sql.DataSource;
 
 public class HikariDatabaseConnection {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(HikariDataSource.class);
-    private static HikariDataSource dataSource;
+    private static DataSource dataSource;
+
     static {
+        initializeDatabase();
+    }
+
+    private static void initializeDatabase() {
+        String dbUrl = "jdbc:postgresql://localhost:5432/";
+        String dbName = "climbing";
+        String dbUsername = "postgres";
+        String dbPassword = "2108135592Ar";
+
         HikariConfig config = new HikariConfig();
-        config.setJdbcUrl("jdbc:postgresql://localhost:5432/climbing");
-        config.setUsername("postgres");
-        config.setPassword("2108135592Ar");
+        config.setJdbcUrl(dbUrl + dbName);
+        config.setUsername(dbUsername);
+        config.setPassword(dbPassword);
+        config.setMaximumPoolSize(5);
+        // Set the driver class name explicitly for PostgreSQL
+        config.setDriverClassName("org.postgresql.Driver");
 
         dataSource = new HikariDataSource(config);
 //        dataSource = ProxyDataSourceBuilder
@@ -22,9 +37,11 @@ public class HikariDatabaseConnection {
 //                .name("MyDataSource")
 //                .logQueryBySlf4j()
 //                .build();
+
+        LOGGER.info("HikariCP initialized");
     }
 
-    public  static HikariDataSource getDataSource(){
+    public static DataSource getDataSource() {
         return dataSource;
     }
 }

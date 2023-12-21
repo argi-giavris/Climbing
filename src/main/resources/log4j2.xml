@@ -14,7 +14,7 @@
     <!-- Define loggers (log categories) -->
     <Loggers>
         <!-- Your application logger configuration -->
-        <Root level="info">
+        <Root level="debug">
             <AppenderRef ref="Console"/>
         </Root>
 

@@ -2,7 +2,6 @@ package com.example.climbing.servlets.routes;
 
 import com.example.climbing.models.GymRoute;
 import com.example.climbing.repositories.GymRouteRepository;
-import com.example.climbing.repositories.RouteRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import javax.servlet.ServletException;

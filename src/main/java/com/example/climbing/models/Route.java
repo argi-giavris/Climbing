@@ -15,10 +15,9 @@ public class Route {
         this.setterEmail = setterEmail;
     }
 
-    // Constructor taking a ResultSet
+
     public Route(ResultSet resultSet) throws SQLException {
         this.id = resultSet.getInt("id");
-        // Assuming your GradeEnum has a method to convert from String
         this.grade = GradeEnum.fromString(resultSet.getString("grade"));
         this.setterEmail = resultSet.getString("setter_email");
     }

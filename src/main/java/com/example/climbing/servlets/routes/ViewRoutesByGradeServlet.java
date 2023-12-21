@@ -18,6 +18,7 @@ public class ViewRoutesByGradeServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 
+
         String grade = req.getParameter("grade");
         RouteRepository routeRepository = new RouteRepository();
         List<Route> routes;

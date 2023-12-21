@@ -1,4 +1,4 @@
-package com.example.climbing.Utils;
+package com.example.climbing.utils;
 
 import com.example.climbing.models.Role;
 import com.example.climbing.models.User;

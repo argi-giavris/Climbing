@@ -1,9 +1,8 @@
 package com.example.climbing.repositories;
 
 
+import com.example.climbing.configuration.HikariDatabaseConnection;
 import com.example.climbing.models.Route;
-import com.example.climbing.models.GymRoute;
-import com.example.climbing.configuration.DatabaseConnection;
 import com.example.climbing.models.User;
 
 import java.sql.*;
@@ -16,7 +15,7 @@ public class RouteRepository {
 
         String query = "INSERT INTO routes (grade, setter_email) VALUES (?, ?)";
 
-        try(Connection dbConnection = DatabaseConnection.initializeDatabase();
+        try(Connection dbConnection = HikariDatabaseConnection.getDataSource().getConnection();
             PreparedStatement statement = dbConnection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS))
         {
             statement.setString(1, route.getGrade().getValue());
@@ -33,7 +32,7 @@ public class RouteRepository {
             }
 
 
-        }catch (SQLException | ClassNotFoundException e) {
+        }catch (SQLException e) {
             throw new RuntimeException(e);
         }
 
@@ -44,7 +43,7 @@ public class RouteRepository {
     public boolean routeExistsById(Integer routeId){
         String query = "SELECT id FROM routes WHERE id = ?";
 
-        try (Connection dbConnection = DatabaseConnection.initializeDatabase();
+        try (Connection dbConnection = HikariDatabaseConnection.getDataSource().getConnection();
              PreparedStatement statement = dbConnection.prepareStatement(query)
         ){
             statement.setInt(1,routeId);
@@ -54,18 +53,18 @@ public class RouteRepository {
             if (resultSet.next()){
                 return true;
             }
-        } catch(SQLException | ClassNotFoundException e){
+        } catch(SQLException e){
             throw new RuntimeException(e);
         }
 
         return false;
     }
 
-    public List<Route> getRoutesByUserEmail(User loggedUser) throws SQLException, ClassNotFoundException {
+    public List<Route> getRoutesByUserEmail(User loggedUser) throws SQLException {
         String query = "Select * from routes where setter_email = ?";
         List<Route> userRoutes = new ArrayList<>();
 
-        try(Connection dbConnection = DatabaseConnection.initializeDatabase();
+        try(Connection dbConnection = HikariDatabaseConnection.getDataSource().getConnection();
             PreparedStatement statement = dbConnection.prepareStatement(query))
         {
             statement.setString(1, loggedUser.getEmail());
@@ -75,6 +74,8 @@ public class RouteRepository {
                     userRoutes.add(route);
                 }
             }
+        } catch (SQLException e){
+            throw new RuntimeException(e);
         }
         return userRoutes;
     }
@@ -83,7 +84,7 @@ public class RouteRepository {
         List<Route> routes = new ArrayList<>();
         String query = "Select * from routes where grade = ?";
 
-        try(Connection dbConnection = DatabaseConnection.initializeDatabase();
+        try(Connection dbConnection = HikariDatabaseConnection.getDataSource().getConnection();
             PreparedStatement statement = dbConnection.prepareStatement(query))
         {
             statement.setString(1, grade);
@@ -93,6 +94,8 @@ public class RouteRepository {
                     routes.add(route);
                 }
             }
+        } catch (SQLException e){
+            throw new RuntimeException(e);
         }
         return routes;
     }

@@ -1,13 +1,11 @@
 package com.example.climbing.servlets.routes;
 
-import com.example.climbing.Utils.Utils;
+import com.example.climbing.utils.Utils;
 import com.example.climbing.models.Route;
 import com.example.climbing.models.User;
 import com.example.climbing.repositories.RouteRepository;
-import com.example.climbing.repositories.UserRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;

@@ -1,6 +1,6 @@
 package com.example.climbing.servlets.routes;
 
-import com.example.climbing.Utils.Utils;
+import com.example.climbing.utils.Utils;
 import com.example.climbing.models.Role;
 import com.example.climbing.models.Route;
 import com.example.climbing.models.User;
@@ -32,7 +32,7 @@ public class ViewRooutesSettedByUserServlet extends HttpServlet {
         if (util.isUserAuthenticatedWithRole(session, Role.SETTER)) {
             try {
                 userRoutes = routeRepository.getRoutesByUserEmail(loggedUser);
-            } catch (SQLException | ClassNotFoundException e) {
+            } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
 

@@ -1,6 +1,6 @@
 package com.example.climbing.repositories;
 
-import com.example.climbing.configuration.DatabaseConnection;
+import com.example.climbing.configuration.HikariDatabaseConnection;
 import com.example.climbing.models.Gym;
 
 import java.sql.*;
@@ -11,7 +11,7 @@ public class GymRepository {
 
         String query = "INSERT INTO gyms (name, location, owner_email) VALUES (?, ?, ?)";
 
-        try(Connection dbConnection = DatabaseConnection.initializeDatabase();
+        try(Connection dbConnection = HikariDatabaseConnection.getDataSource().getConnection();
             PreparedStatement statement = dbConnection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS))
         {
             statement.setString(1, gym.getName());
@@ -29,7 +29,7 @@ public class GymRepository {
                 }
             }
 
-        } catch (SQLException | ClassNotFoundException e) {
+        } catch (SQLException e) {
             throw new RuntimeException(e);
         }
 
@@ -39,7 +39,7 @@ public class GymRepository {
     public boolean gymExistsById(Integer gymId){
         String query = "SELECT id FROM gyms WHERE id = ?";
 
-        try (Connection dbConnection = DatabaseConnection.initializeDatabase();
+        try (Connection dbConnection = HikariDatabaseConnection.getDataSource().getConnection();
              PreparedStatement statement = dbConnection.prepareStatement(query)
         ){
             statement.setInt(1,gymId);
@@ -49,7 +49,7 @@ public class GymRepository {
             if (resultSet.next()){
                 return true;
             }
-        } catch(SQLException | ClassNotFoundException e){
+        } catch(SQLException e){
             throw new RuntimeException(e);
         }
 

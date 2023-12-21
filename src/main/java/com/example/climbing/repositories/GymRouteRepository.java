@@ -1,6 +1,6 @@
 package com.example.climbing.repositories;
 
-import com.example.climbing.configuration.DatabaseConnection;
+import com.example.climbing.configuration.HikariDatabaseConnection;
 import com.example.climbing.models.GymRoute;
 
 import java.sql.*;
@@ -14,7 +14,7 @@ public class GymRouteRepository {
         GymRepository gymRepository = new GymRepository();
 
         if (routeRepository.routeExistsById(gymRoute.getRouteId()) && gymRepository.gymExistsById(gymRoute.getGymId())){
-            try(Connection dbConnection = DatabaseConnection.initializeDatabase();
+            try(Connection dbConnection = HikariDatabaseConnection.getDataSource().getConnection();
                 PreparedStatement statement = dbConnection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS))
             {
                 statement.setInt(1, gymRoute.getGymId());
@@ -27,7 +27,7 @@ public class GymRouteRepository {
                     }
                 }
 
-            } catch (SQLException | ClassNotFoundException e) {
+            } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
         } else {

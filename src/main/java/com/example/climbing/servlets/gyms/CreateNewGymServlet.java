@@ -1,6 +1,6 @@
 package com.example.climbing.servlets.gyms;
 
-import com.example.climbing.Utils.Utils;
+import com.example.climbing.utils.Utils;
 import com.example.climbing.models.Gym;
 import com.example.climbing.models.Role;
 import com.example.climbing.models.User;
